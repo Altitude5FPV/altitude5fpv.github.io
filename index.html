@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Altitude 5 FPV | Cinematic Aerials & High-Speed Drone Cinematography</title>
+  <meta name="description" content="Commercial FPV drone cinematography specializing in high-speed automotive chase, action sports, and indoor one-takes. Based in the Netherlands & Cyprus, operating worldwide.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            dark: {
+              950: '#060608',
+              900: '#0a0a0d',
+              850: '#111116',
+              800: '#17171e',
+              700: '#262633',
+            },
+            accent: {
+              red: '#ff3344',
+              hover: '#ff4d5d',
+              cyan: '#00f0ff',
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'radar': 'radar 8s linear infinite',
+          },
+          keyframes: {
+            radar: {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom HUD scanlines and subtle grid */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+    .hud-blur {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    /* Glow aesthetics */
+    .glow-red {
+      box-shadow: 0 0 25px -5px rgba(255, 51, 68, 0.4);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 25px -5px rgba(0, 240, 255, 0.3);
+    }
+    /* Hide scrollbars for clean filter bar */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-dark-950 text-zinc-100 font-sans antialiased selection:bg-accent-red selection:text-white">
+
+  <!-- ========================================================================= -->
+  <!-- 1. NAVIGATION -->
+  <!-- ========================================================================= -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 md:px-12 hud-blur bg-dark-950/80 border-b border-white/5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-lg bg-dark-850 border border-white/10 flex items-center justify-center relative overflow-hidden group-hover:border-accent-red/60 transition-colors">
+          <!-- Crosshair FPV icon -->
+          <svg class="w-5 h-5 text-accent-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="8" stroke-opacity="0.3"></circle>
+            <line x1="12" y1="2" x2="12" y2="6"></line>
+            <line x1="12" y1="18" x2="12" y2="22"></line>
+            <line x1="2" y1="12" x2="6" y2="12"></line>
+            <line x1="18" y1="12" x2="22" y2="12"></line>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-bold tracking-wider text-lg uppercase text-white flex items-center gap-1.5">
+            Altitude 5 <span class="text-accent-red text-xs px-1.5 py-0.5 rounded bg-accent-red/10 border border-accent-red/20">FPV</span>
+          </span>
+          <span class="text-[9px] tracking-widest text-zinc-400 uppercase font-mono">NL • CY • Worldwide</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+        <a href="#work" class="hover:text-white transition-colors">Showreel</a>
+        <a href="#services" class="hover:text-white transition-colors">Services</a>
+        <a href="#fleet" class="hover:text-white transition-colors">Fleet & Gear</a>
+        <a href="#about" class="hover:text-white transition-colors">Specs & Safety</a>
+        <a href="#contact" class="hover:text-white transition-colors">Contact</a>
+      </nav>
+
+      <!-- CTA Button -->
+      <div class="hidden md:flex items-center gap-4">
+        <a href="#contact" class="relative group px-5 py-2.5 rounded-md bg-accent-red hover:bg-accent-hover text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 glow-red flex items-center gap-2">
+          <span>Book a Shoot</span>
+          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden text-zinc-400 hover:text-white p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent-red" aria-label="Toggle Navigation">
+        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden pt-4 pb-6 border-t border-white/5 mt-4 flex flex-col gap-4 text-base font-medium">
+      <a href="#work" class="mobile-nav-link text-zinc-300 hover:text-accent-red transition-colors py-1">Showreel</a>
+      <a href="#services" class="mobile-nav-link text-zinc-300 hover:text-accent-red transition-colors py-1">Services</a>
+      <a href="#fleet" class="mobile-nav-link text-zinc-300 hover:text-accent-red transition-colors py-1">Fleet & Gear</a>
+      <a href="#about" class="mobile-nav-link text-zinc-300 hover:text-accent-red transition-colors py-1">Specs & Safety</a>
+      <a href="#contact" class="mobile-nav-link text-zinc-300 hover:text-accent-red transition-colors py-1">Contact</a>
+      <a href="#contact" class="mobile-nav-link mt-2 w-full text-center py-3 bg-accent-red text-white text-xs uppercase tracking-wider font-bold rounded-lg glow-red">Book a Shoot</a>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. HERO SECTION -->
+  <!-- ========================================================================= -->
+  <section class="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-6 overflow-hidden bg-grid-pattern">
+    <!-- Ambient Radial Glows -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-red/10 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute bottom-10 right-10 w-[400px] h-[400px] bg-accent-cyan/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <!-- Simulated FPV HUD Overlay elements -->
+    <div class="absolute inset-0 pointer-events-none z-10 hidden sm:block">
+      <!-- Top Left HUD -->
+      <div class="absolute top-28 left-8 font-mono text-[11px] text-zinc-500 tracking-wider space-y-1">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>LINK: DJI O3 AIR UNIT // 1080P 100FPS</span>
+        </div>
+        <p>BATT: 24.8V [6S] • 98%</p>
+        <p>CH 1 // 5.8 GHz // LOW LATENCY</p>
+      </div>
+
+      <!-- Top Right HUD -->
+      <div class="absolute top-28 right-8 font-mono text-[11px] text-zinc-500 text-right tracking-wider space-y-1">
+        <p>LOC: 52.3676° N, 4.9041° E</p>
+        <p>AIRSPEED: 142 KM/H // APEX REC</p>
+        <p class="text-accent-red font-semibold">● REC [00:14:32:08]</p>
+      </div>
+
+      <!-- Center Crosshair reticles -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-white/5 rounded-full pointer-events-none flex items-center justify-center">
+        <div class="w-12 h-[1px] bg-white/20"></div>
+        <div class="h-12 w-[1px] bg-white/20 absolute"></div>
+        <div class="w-2 h-2 border border-accent-red/50 absolute"></div>
+      </div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="max-w-5xl mx-auto text-center relative z-20">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-dark-850/80 border border-white/10 text-xs font-mono text-zinc-300 mb-8 backdrop-blur-md">
+        <span class="w-2 h-2 rounded-full bg-accent-red"></span>
+        <span class="tracking-widest uppercase">CINEMATIC FPV & AERIAL CINEMATOGRAPHY</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white mb-6 uppercase leading-[1.1]">
+        High-Speed Precision Aerials for <br class="hidden sm:inline">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-500">Action & Automotive</span>
+      </h1>
+
+      <!-- Subtext -->
+      <p class="text-base sm:text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 font-normal leading-relaxed">
+        Dynamic one-take tracking, extreme chase-cam aerodynamics, and ultra-high-definition cinema deliverables. Certified for complex European & worldwide airspace operations.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <!-- Play Showreel CTA -->
+        <button onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')" class="w-full sm:w-auto px-7 py-3.5 rounded-lg bg-white text-dark-950 font-display font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-3 hover:bg-zinc-200 transition-all shadow-xl group">
+          <span class="w-6 h-6 rounded-full bg-dark-950 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-3 h-3 translate-x-0.5 fill-current" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </span>
+          <span>Watch 2026 Reel</span>
+        </button>
+
+        <!-- Direct Contact CTA -->
+        <a href="#contact" class="w-full sm:w-auto px-7 py-3.5 rounded-lg bg-dark-850 hover:bg-dark-800 border border-white/15 text-zinc-200 font-display font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+          <span>Inquire Availability</span>
+        </a>
+      </div>
+
+      <!-- Operating Base Badges -->
+      <div class="mt-14 pt-8 border-t border-white/5 flex flex-wrap items-center justify-center gap-8 text-xs font-mono text-zinc-500">
+        <div class="flex items-center gap-2">
+          <span class="text-zinc-400">OPERATIONAL BASE:</span>
+          <span class="text-zinc-200">AMSTERDAM (NL) & LIMASSOL (CY)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-zinc-400">PILOT CERTIFICATION:</span>
+          <span class="text-zinc-200">EASA A1/A2/A3 SPECIFIC</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-zinc-400">MAX TRACKING SPEED:</span>
+          <span class="text-accent-red font-bold">170+ KM/H</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 3. SHOWREEL & PORTFOLIO GRID -->
+  <!-- ========================================================================= -->
+  <section id="work" class="py-24 px-6 md:px-12 bg-dark-900 border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <div class="text-xs font-mono text-accent-red tracking-widest uppercase mb-2">Featured Deployments</div>
+          <h2 class="font-display text-3xl md:text-5xl font-bold tracking-tight text-white uppercase">Selected Work</h2>
+        </div>
+        
+        <!-- Filter Bar -->
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0">
+          <button onclick="filterWork('all')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-mono uppercase bg-accent-red text-white transition-all" data-filter="all">All</button>
+          <button onclick="filterWork('automotive')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-mono uppercase bg-dark-800 text-zinc-400 hover:text-white transition-all border border-white/5" data-filter="automotive">Automotive</button>
+          <button onclick="filterWork('action')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-mono uppercase bg-dark-800 text-zinc-400 hover:text-white transition-all border border-white/5" data-filter="action">Action Sports</button>
+          <button onclick="filterWork('commercial')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-mono uppercase bg-dark-800 text-zinc-400 hover:text-white transition-all border border-white/5" data-filter="commercial">Commercial</button>
+          <button onclick="filterWork('indoor')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-mono uppercase bg-dark-800 text-zinc-400 hover:text-white transition-all border border-white/5" data-filter="indoor">Indoor One-Take</button>
+        </div>
+      </div>
+
+      <!-- Portfolio Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
+        
+        <!-- Project Card 1: Automotive -->
+        <div class="work-card group relative rounded-xl overflow-hidden bg-dark-850 border border-white/10 hover:border-accent-red/50 transition-all duration-300" data-category="automotive">
+          <div class="aspect-video w-full overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=900&q=80" alt="Supercar Drift Chase" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/20 to-transparent"></div>
+            <!-- Play trigger overlay -->
+            <button onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-dark-950/40 backdrop-blur-sm cursor-pointer" aria-label="Play video">
+              <span class="w-12 h-12 rounded-full bg-accent-red text-white flex items-center justify-center glow-red transform scale-90 group-hover:scale-100 transition-transform">
+                <svg class="w-5 h-5 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+            <span class="absolute top-3 right-3 text-[10px] font-mono bg-dark-950/80 px-2 py-0.5 rounded text-zinc-300 border border-white/10">01:45</span>
+          </div>
+          <div class="p-5">
+            <div class="text-[10px] font-mono text-accent-red uppercase tracking-wider mb-1">Automotive • Nürburgring Spec</div>
+            <h3 class="font-display text-lg font-bold text-white mb-2 group-hover:text-accent-red transition-colors">Porsche GT3 RS Apex Pursuit</h3>
+            <p class="text-xs text-zinc-400 line-clamp-2">High-velocity tarmac chase tracking at 155 km/h using custom 6S 7-inch aerodynamic rig with naked 6K cinema payload.</p>
+          </div>
+        </div>
+
+        <!-- Project Card 2: Action Sports -->
+        <div class="work-card group relative rounded-xl overflow-hidden bg-dark-850 border border-white/10 hover:border-accent-red/50 transition-all duration-300" data-category="action">
+          <div class="aspect-video w-full overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=900&q=80" alt="Downhill Mountain Bike" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/20 to-transparent"></div>
+            <button onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-dark-950/40 backdrop-blur-sm cursor-pointer" aria-label="Play video">
+              <span class="w-12 h-12 rounded-full bg-accent-red text-white flex items-center justify-center glow-red transform scale-90 group-hover:scale-100 transition-transform">
+                <svg class="w-5 h-5 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+            <span class="absolute top-3 right-3 text-[10px] font-mono bg-dark-950/80 px-2 py-0.5 rounded text-zinc-300 border border-white/10">02:10</span>
+          </div>
+          <div class="p-5">
+            <div class="text-[10px] font-mono text-accent-red uppercase tracking-wider mb-1">Action Sports • Cyprus Ridges</div>
+            <h3 class="font-display text-lg font-bold text-white mb-2 group-hover:text-accent-red transition-colors">Troodos Downhill MTB Descent</h3>
+            <p class="text-xs text-zinc-400 line-clamp-2">Ultra-tight canopy proximity flying tracking Red Bull athletes down technical ridge singletracks at speed.</p>
+          </div>
+        </div>
+
+        <!-- Project Card 3: Indoor One-Take -->
+        <div class="work-card group relative rounded-xl overflow-hidden bg-dark-850 border border-white/10 hover:border-accent-red/50 transition-all duration-300" data-category="indoor">
+          <div class="aspect-video w-full overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=900&q=80" alt="Architectural One-Take" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/20 to-transparent"></div>
+            <button onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-dark-950/40 backdrop-blur-sm cursor-pointer" aria-label="Play video">
+              <span class="w-12 h-12 rounded-full bg-accent-red text-white flex items-center justify-center glow-red transform scale-90 group-hover:scale-100 transition-transform">
+                <svg class="w-5 h-5 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+            <span class="absolute top-3 right-3 text-[10px] font-mono bg-dark-950/80 px-2 py-0.5 rounded text-zinc-300 border border-white/10">03:00</span>
+          </div>
+          <div class="p-5">
+            <div class="text-[10px] font-mono text-accent-red uppercase tracking-wider mb-1">Indoor • Industrial Facility</div>
+            <h3 class="font-display text-lg font-bold text-white mb-2 group-hover:text-accent-red transition-colors">Rotterdam Mega-Port Logistic Tour</h3>
+            <p class="text-xs text-zinc-400 line-clamp-2">Continuous ducted Cinewhoop one-take navigating through moving machinery, automated cranes, and control rooms.</p>
+          </div>
+        </div>
+
+        <!-- Project Card 4: Commercial -->
+        <div class="work-card group relative rounded-xl overflow-hidden bg-dark-850 border border-white/10 hover:border-accent-red/50 transition-all duration-300" data-category="commercial">
+          <div class="aspect-video w-full overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80" alt="Luxury Automotive Commercial" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/20 to-transparent"></div>
+            <button onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-dark-950/40 backdrop-blur-sm cursor-pointer" aria-label="Play video">
+              <span class="w-12 h-12 rounded-full bg-accent-red text-white flex items-center justify-center glow-red transform scale-90 group-hover:scale-100 transition-transform">
+                <svg class="w-5 h-5 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+            <span class="absolute top-3 right-3 text-[10px] font-mono bg-dark-950/80 px-2 py-0.5 rounded text-zinc-300 border border-white/10">00:45</span>
+          </div>
+          <div class="p-5">
+            <div class="text-[10px] font-mono text-accent-red uppercase tracking-wider mb-1">Commercial • Broadcast 4K</div>
+            <h3 class="font-display text-lg font-bold text-white mb-2 group-hover:text-accent-red transition-colors">BMW M Performance Launch</h3>
+            <p class="text-xs text-zinc-400 line-clamp-2">Dynamic car-to-car proximity filming with client wireless low-latency monitors for immediate creative direction.</p>
+          </div>
+        </div>
+
+        <!-- Project Card 5: Action Sports -->
+        <div class="work-card group relative rounded-xl overflow-hidden bg-dark-850 border border-white/10 hover:border-accent-red/50 transition-all duration-300" data-category="action">
+          <div class="aspect-video w-full overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80" alt="Kite Surfing Chase" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/20 to-transparent"></div>
+            <button onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-dark-950/40 backdrop-blur-sm cursor-pointer" aria-label="Play video">
+              <span class="w-12 h-12 rounded-full bg-accent-red text-white flex items-center justify-center glow-red transform scale-90 group-hover:scale-100 transition-transform">
+                <svg class="w-5 h-5 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+            <span class="absolute top-3 right-3 text-[10px] font-mono bg-dark-950/80 px-2 py-0.5 rounded text-zinc-300 border border-white/10">01:15</span>
+          </div>
+          <div class="p-5">
+            <div class="text-[10px] font-mono text-accent-red uppercase tracking-wider mb-1">Action Sports • Marine Waters</div>
+            <h3 class="font-display text-lg font-bold text-white mb-2 group-hover:text-accent-red transition-colors">Mediterranean Kitefoil Chase</h3>
+            <p class="text-xs text-zinc-400 line-clamp-2">Water-resistant high speed 5-inch rig tracking foil kiteboarders through 30-knot sea gusts in Cyprus waters.</p>
+          </div>
+        </div>
+
+        <!-- Project Card 6: Automotive -->
+        <div class="work-card group relative rounded-xl overflow-hidden bg-dark-850 border border-white/10 hover:border-accent-red/50 transition-all duration-300" data-category="automotive">
+          <div class="aspect-video w-full overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=900&q=80" alt="Night Drift Battle" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/20 to-transparent"></div>
+            <button onclick="openVideoModal('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-dark-950/40 backdrop-blur-sm cursor-pointer" aria-label="Play video">
+              <span class="w-12 h-12 rounded-full bg-accent-red text-white flex items-center justify-center glow-red transform scale-90 group-hover:scale-100 transition-transform">
+                <svg class="w-5 h-5 translate-x-0.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+            <span class="absolute top-3 right-3 text-[10px] font-mono bg-dark-950/80 px-2 py-0.5 rounded text-zinc-300 border border-white/10">01:50</span>
+          </div>
+          <div class="p-5">
+            <div class="text-[10px] font-mono text-accent-red uppercase tracking-wider mb-1">Automotive • Night Track</div>
+            <h3 class="font-display text-lg font-bold text-white mb-2 group-hover:text-accent-red transition-colors">Pro Drift Masters Tandem Run</h3>
+            <p class="text-xs text-zinc-400 line-clamp-2">In-smoke proximity tracking inches from rear bumpers with high ISO low-light custom cinema sensor tuning.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 4. PRODUCTION SERVICES -->
+  <!-- ========================================================================= -->
+  <section id="services" class="py-24 px-6 md:px-12 bg-dark-950 relative">
+    <div class="max-w-7xl mx-auto">
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-16">
+        <div class="text-xs font-mono text-accent-red tracking-widest uppercase mb-2">Capabilities</div>
+        <h2 class="font-display text-3xl md:text-5xl font-bold tracking-tight text-white uppercase">Production Offerings</h2>
+        <p class="mt-4 text-zinc-400 text-sm md:text-base">We bridge the gap between impossible Hollywood cinema angles and extreme aerodynamic speed, delivered safely and legally.</p>
+      </div>
+
+      <!-- 4 Core Service Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Service 1 -->
+        <div class="p-8 rounded-2xl bg-dark-900 border border-white/10 hover:border-accent-red/40 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded-lg bg-dark-850 border border-white/10 flex items-center justify-center text-accent-red mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">High-Speed Chase Car Tracking</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+            Custom-built 6S and 8S aerodynamic chase drones capable of maintaining formation with supercars and race bikes up to 170 km/h. Smooth dynamic dive lines and tight bumper-to-bumper proximity.
+          </p>
+          <ul class="text-xs font-mono text-zinc-400 space-y-1.5 border-t border-white/5 pt-4">
+            <li class="flex items-center gap-2"><span class="text-accent-red">▸</span> 0–100 km/h in under 1.8 seconds</li>
+            <li class="flex items-center gap-2"><span class="text-accent-red">▸</span> High wind resistance (up to Beaufort 7)</li>
+            <li class="flex items-center gap-2"><span class="text-accent-red">▸</span> Ideal for track days, rally, and automotive spots</li>
+          </ul>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="p-8 rounded-2xl bg-dark-900 border border-white/10 hover:border-accent-cyan/40 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded-lg bg-dark-850 border border-white/10 flex items-center justify-center text-accent-cyan mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">Indoor Cinewhoop One-Takes</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+            Sub-250g fully ducted propeller rigs designed for safe operation around people, high-value interiors, hotels, real estate, and active manufacturing plants with seamless transitions.
+          </p>
+          <ul class="text-xs font-mono text-zinc-400 space-y-1.5 border-t border-white/5 pt-4">
+            <li class="flex items-center gap-2"><span class="text-accent-cyan">▸</span> Enclosed foam bumper prop-guards</li>
+            <li class="flex items-center gap-2"><span class="text-accent-cyan">▸</span> Unbroken continuous storytelling tours</li>
+            <li class="flex items-center gap-2"><span class="text-accent-cyan">▸</span> Zero hazard for actors and sensitive assets</li>
+          </ul>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="p-8 rounded-2xl bg-dark-900 border border-white/10 hover:border-accent-red/40 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded-lg bg-dark-850 border border-white/10 flex items-center justify-center text-accent-red mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">Action Sports & Extreme Tracking</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+            Following downhill MTB runs, motocross jumps, wakeboarders, and ski descents. We fly within arm's reach of athletes to capture perspective impossible with traditional cranes or cable-cams.
+          </p>
+          <ul class="text-xs font-mono text-zinc-400 space-y-1.5 border-t border-white/5 pt-4">
+            <li class="flex items-center gap-2"><span class="text-accent-red">▸</span> Rapid altitude and ridge elevation changes</li>
+            <li class="flex items-center gap-2"><span class="text-accent-red">▸</span> Dynamic horizon levelling or locked roll</li>
+            <li class="flex items-center gap-2"><span class="text-accent-red">▸</span> High frame rate slow-motion deliverables</li>
+          </ul>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="p-8 rounded-2xl bg-dark-900 border border-white/10 hover:border-accent-cyan/40 transition-all duration-300 group">
+          <div class="w-12 h-12 rounded-lg bg-dark-850 border border-white/10 flex items-center justify-center text-accent-cyan mb-6 group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">Cinema Ready 4K / 6K Workflows</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+            Color-matched 10-bit and 12-bit RAW workflows (Sony FX3/FX6, RED Komodo, BMPCC, or Gyroflow-stabilized high-bitrate GoPro Bones) with wireless HD director video feeds straight to the video village.
+          </p>
+          <ul class="text-xs font-mono text-zinc-400 space-y-1.5 border-t border-white/5 pt-4">
+            <li class="flex items-center gap-2"><span class="text-accent-cyan">▸</span> Wireless HDMI/SDI client viewing monitors</li>
+            <li class="flex items-center gap-2"><span class="text-accent-cyan">▸</span> Gyroflow gyro-data stabilization pipeline</li>
+            <li class="flex items-center gap-2"><span class="text-accent-cyan">▸</span> DCI 4K / 5.3K 10-Bit Log color matching</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 5. FLEET & TECH SPECS -->
+  <!-- ========================================================================= -->
+  <section id="fleet" class="py-24 px-6 md:px-12 bg-dark-900 border-y border-white/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div>
+          <div class="text-xs font-mono text-accent-cyan tracking-widest uppercase mb-2">Hardware Telemetry</div>
+          <h2 class="font-display text-3xl md:text-5xl font-bold tracking-tight text-white uppercase">The Air Fleet</h2>
+        </div>
+        <p class="text-zinc-400 text-xs md:text-sm max-w-md font-mono">
+          Each airframe is custom-soldered, vibration-tuned, and configured with redundant failsafes for flawless set performance.
+        </p>
+      </div>
+
+      <!-- Fleet Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Rig 1 -->
+        <div class="bg-dark-850 p-6 rounded-2xl border border-white/10 relative">
+          <div class="text-xs font-mono text-accent-red font-bold mb-2">RIG // 01 • CHASE APEX</div>
+          <h3 class="font-display text-xl font-bold text-white mb-4">7-Inch Long Range / High Speed</h3>
+          <div class="space-y-3 text-xs font-mono text-zinc-300">
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">MAX SPEED</span>
+              <span class="text-white font-bold">175 km/h</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">PAYLOAD CAPACITY</span>
+              <span class="text-white">Up to 900g (Cinema Rig)</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">BATTERY ARCHITECTURE</span>
+              <span class="text-white">6S LiPo 2200mAh / Li-Ion</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">PRIMARY USAGE</span>
+              <span class="text-accent-red">Car Chase, Mountain Tracking</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rig 2 -->
+        <div class="bg-dark-850 p-6 rounded-2xl border border-white/10 relative">
+          <div class="text-xs font-mono text-accent-cyan font-bold mb-2">RIG // 02 • PROXIMITY DUCT</div>
+          <h3 class="font-display text-xl font-bold text-white mb-4">3.5-Inch Ducted Cinewhoop</h3>
+          <div class="space-y-3 text-xs font-mono text-zinc-300">
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">MAX SPEED</span>
+              <span class="text-white font-bold">95 km/h</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">WEIGHT CLASS</span>
+              <span class="text-emerald-400 font-bold">&lt; 249g (Compliant C0)</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">PROP PROTECTION</span>
+              <span class="text-white">Full Injected Polycarbonate</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">PRIMARY USAGE</span>
+              <span class="text-accent-cyan">Indoor, People, Real Estate</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rig 3 -->
+        <div class="bg-dark-850 p-6 rounded-2xl border border-white/10 relative">
+          <div class="text-xs font-mono text-accent-red font-bold mb-2">RIG // 03 • CINELIFTER</div>
+          <h3 class="font-display text-xl font-bold text-white mb-4">Heavy Lifter X8 Octocopter</h3>
+          <div class="space-y-3 text-xs font-mono text-zinc-300">
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">MAX SPEED</span>
+              <span class="text-white font-bold">140 km/h</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">PAYLOAD SUPPORT</span>
+              <span class="text-white font-bold">RED Komodo / Sony FX6</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">VIDEO LINK</span>
+              <span class="text-white">Teradek Bolt 4K Wireless</span>
+            </div>
+            <div class="flex justify-between border-b border-white/5 pb-2">
+              <span class="text-zinc-500">PRIMARY USAGE</span>
+              <span class="text-accent-red">Feature Commercials & Film</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 6. ABOUT PILOT & SAFETY SPECS -->
+  <!-- ========================================================================= -->
+  <section id="about" class="py-24 px-6 md:px-12 bg-dark-950">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Pilot Graphic / Badge -->
+      <div class="lg:col-span-5 relative">
+        <div class="rounded-2xl overflow-hidden border border-white/10 relative group">
+          <img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=800&q=80" alt="FPV Pilot on set" class="w-full h-[450px] object-cover filter grayscale contrast-125 group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/40 to-transparent"></div>
+          
+          <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-dark-900/90 border border-white/10 backdrop-blur-md">
+            <div class="flex items-center justify-between font-mono text-xs mb-1">
+              <span class="text-accent-red font-bold">EASA LICENSED OPERATOR</span>
+              <span class="text-emerald-400">STATUS: ACTIVE</span>
+            </div>
+            <div class="text-white text-sm font-semibold">Registered in NL (EU) & Cyprus Civil Aviation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Info -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="text-xs font-mono text-accent-red tracking-widest uppercase">Safety & Certification</div>
+        <h2 class="font-display text-3xl md:text-5xl font-bold tracking-tight text-white uppercase">
+          Precision Without Compromise
+        </h2>
+        <p class="text-zinc-400 text-sm md:text-base leading-relaxed">
+          Altitude 5 FPV delivers high-octane aerial media without putting crew, talent, or production timelines at risk. We manage all aviation paperwork, airspace authorizations (NOTAMs), and permits across the European Union and internationally.
+        </p>
+
+        <!-- Feature Points -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+          <div class="p-4 rounded-xl bg-dark-900 border border-white/5">
+            <div class="font-display font-bold text-white text-base mb-1">€2.5M+ Aviation Insurance</div>
+            <p class="text-xs text-zinc-400">Complete commercial aviation third-party liability coverage for European and international film sets.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-dark-900 border border-white/5">
+            <div class="font-display font-bold text-white text-base mb-1">Dual European Bases</div>
+            <p class="text-xs text-zinc-400">Based in the Netherlands and Cyprus. Ready for rapid international deployment within 24 to 48 hours.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-dark-900 border border-white/5">
+            <div class="font-display font-bold text-white text-base mb-1">Director's HD Village</div>
+            <p class="text-xs text-zinc-400">Low latency wireless feed directly to the production monitor. The director sees the exact take in real-time.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-dark-900 border border-white/5">
+            <div class="font-display font-bold text-white text-base mb-1">Post-Production Ready</div>
+            <p class="text-xs text-zinc-400">Footage delivered formatted with baked-in Gyroflow metadata or pre-stabilized in 10-bit color profiles.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 7. CONTACT & BOOKING FORM -->
+  <!-- ========================================================================= -->
+  <section id="contact" class="py-24 px-6 md:px-12 bg-dark-900 border-t border-white/5 relative">
+    <div class="max-w-5xl mx-auto">
+      
+      <div class="text-center max-w-xl mx-auto mb-16">
+        <div class="text-xs font-mono text-accent-red tracking-widest uppercase mb-2">Initiate Mission</div>
+        <h2 class="font-display text-3xl md:text-5xl font-bold tracking-tight text-white uppercase">Book a Shoot</h2>
+        <p class="mt-3 text-zinc-400 text-sm">Tell us about your project, target dates, and location. We typically reply with availability and quote parameters within 12 hours.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        
+        <!-- Direct Details -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="p-6 rounded-2xl bg-dark-850 border border-white/10 space-y-5">
+            <h3 class="font-display font-bold text-white text-lg">Direct Inquiries</h3>
+            
+            <div class="space-y-4 text-xs font-mono">
+              <div>
+                <span class="text-zinc-500 block mb-1">PRIMARY EMAIL</span>
+                <a href="mailto:altitude5fpv@gmail.com" class="text-zinc-200 hover:text-accent-red text-sm transition-colors">altitude5fpv@gmail.com</a>
+              </div>
+
+              <div>
+                <span class="text-zinc-500 block mb-1">OFFICIAL DOMAIN ALIAS</span>
+                <span class="text-zinc-400 text-sm">info@altitude5fpv.com</span>
+              </div>
+
+              <div>
+                <span class="text-zinc-500 block mb-1">OPERATIONAL LOCATIONS</span>
+                <p class="text-zinc-300">Amsterdam / Arnhem, Netherlands</p>
+                <p class="text-zinc-300">Limassol / Nicosia, Cyprus</p>
+                <p class="text-zinc-400 text-[10px] mt-1">Available worldwide upon request</p>
+              </div>
+
+              <div>
+                <span class="text-zinc-500 block mb-1">SOCIAL & REELS</span>
+                <div class="flex gap-4 pt-1">
+                  <a href="https://instagram.com" target="_blank" class="text-zinc-300 hover:text-accent-red transition-colors">@altitude5fpv</a>
+                  <span class="text-zinc-600">•</span>
+                  <a href="https://youtube.com" target="_blank" class="text-zinc-300 hover:text-accent-red transition-colors">YouTube</a>
+                  <span class="text-zinc-600">•</span>
+                  <a href="https://vimeo.com" target="_blank" class="text-zinc-300 hover:text-accent-red transition-colors">Vimeo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="lg:col-span-7">
+          <!-- 
+            To connect live submissions for free:
+            Sign up at https://formspree.io or https://web3forms.com and replace the action URL below!
+          -->
+          <form id="booking-form" class="space-y-4 bg-dark-850 p-8 rounded-2xl border border-white/10" onsubmit="handleFormSubmit(event)">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Your Name / Production Co. *</label>
+                <input type="text" id="name" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="e.g. Apex Media House">
+              </div>
+              <div>
+                <label for="email" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Email Address *</label>
+                <input type="email" id="email" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="producer@agency.com">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="shootType" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Shoot Type *</label>
+                <select id="shootType" class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors">
+                  <option value="automotive">Automotive Chase / Drift</option>
+                  <option value="actionsports">Action Sports / Outdoor</option>
+                  <option value="indoor">Indoor Cinewhoop One-Take</option>
+                  <option value="commercial">Commercial / Brand Campaign</option>
+                  <option value="other">Other / Custom Deployment</option>
+                </select>
+              </div>
+              <div>
+                <label for="location" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Shoot Location & Date</label>
+                <input type="text" id="location" class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="e.g. Netherlands, Nov 2026">
+              </div>
+            </div>
+
+            <div>
+              <label for="details" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Project Brief & Deliverable Specs *</label>
+              <textarea id="details" rows="4" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors resize-none" placeholder="Provide details regarding flight environment, desired cameras, or creative moodboard..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submit-btn" class="w-full py-4 rounded-lg bg-accent-red hover:bg-accent-hover text-white font-display font-bold text-xs uppercase tracking-wider transition-all glow-red">
+              Transmit Project Request
+            </button>
+
+            <!-- Status Message Container -->
+            <div id="form-feedback" class="hidden p-4 rounded-lg text-xs font-mono text-center"></div>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 8. FOOTER -->
+  <!-- ========================================================================= -->
+  <footer class="py-12 px-6 md:px-12 bg-dark-950 border-t border-white/5 text-zinc-500 text-xs font-mono">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <div class="flex items-center gap-3">
+        <div class="w-6 h-6 rounded bg-dark-850 border border-white/10 flex items-center justify-center text-accent-red">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="8"></circle>
+            <circle cx="12" cy="12" r="2" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <span class="text-zinc-400 uppercase tracking-wider font-semibold">Altitude 5 FPV</span>
+        <span>•</span>
+        <span>All Rights Reserved &copy; 2026</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-6">
+        <a href="#work" class="hover:text-zinc-300 transition-colors">Showreel</a>
+        <a href="#services" class="hover:text-zinc-300 transition-colors">Services</a>
+        <a href="#fleet" class="hover:text-zinc-300 transition-colors">Fleet Specs</a>
+        <a href="#contact" class="hover:text-zinc-300 transition-colors">Contact</a>
+      </div>
+
+      <div>
+        <span>EU EASA Regulated & Insured</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 9. VIDEO LIGHTBOX MODAL -->
+  <!-- ========================================================================= -->
+  <div id="video-modal" class="fixed inset-0 z-50 bg-dark-950/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeVideoModal(event)">
+    <div class="relative w-full max-w-4xl bg-dark-900 border border-white/15 rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <!-- Modal Top Bar -->
+      <div class="flex items-center justify-between px-4 py-3 bg-dark-850 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent-red animate-pulse"></span>
+          <span class="text-xs font-mono text-zinc-300 uppercase tracking-widest">Altitude 5 FPV Reel Playback</span>
+        </div>
+        <button onclick="closeVideoModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg focus:outline-none" aria-label="Close modal">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Responsive Video Player Container -->
+      <div class="aspect-video w-full bg-black">
+        <iframe id="modal-video-iframe" class="w-full h-full" src="" title="Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT LOGIC -->
+  <!-- ========================================================================= -->
+  <script>
+    // Mobile navigation toggle
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      hamburgerIcon.classList.toggle('hidden', !isHidden);
+      closeIcon.classList.toggle('hidden', isHidden);
+    });
+
+    // Close mobile menu on click of navigation links
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      });
+    });
+
+    // Portfolio filter buttons
+    function filterWork(category) {
+      // Update button visual styles
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-filter') === category) {
+          btn.classList.add('bg-accent-red', 'text-white');
+          btn.classList.remove('bg-dark-800', 'text-zinc-400');
+        } else {
+          btn.classList.remove('bg-accent-red', 'text-white');
+          btn.classList.add('bg-dark-800', 'text-zinc-400');
+        }
+      });
+
+      // Filter work cards
+      const cards = document.querySelectorAll('.work-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // Video modal handlers
+    const videoModal = document.getElementById('video-modal');
+    const videoIframe = document.getElementById('modal-video-iframe');
+
+    function openVideoModal(videoSrc) {
+      videoIframe.src = videoSrc;
+      videoModal.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden'; // Stop body scrolling
+    }
+
+    function closeVideoModal(event) {
+      videoModal.classList.add('opacity-0', 'pointer-events-none');
+      videoIframe.src = ''; // Stops audio/video playback immediately
+      document.body.style.overflow = 'auto'; // Restore scrolling
+    }
+
+    // Close on Escape key press
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !videoModal.classList.contains('pointer-events-none')) {
+        closeVideoModal();
+      }
+    });
+
+    // Booking form mock handler
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const feedback = document.getElementById('form-feedback');
+      const submitBtn = document.getElementById('submit-btn');
+
+      // Loading state
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'TRANSMITTING INQUIRY...';
+
+      setTimeout(() => {
+        feedback.classList.remove('hidden');
+        feedback.classList.add('bg-emerald-950/60', 'border', 'border-emerald-500/40', 'text-emerald-300');
+        feedback.innerHTML = '✓ MISSION BRIEF RECEIVED. We will contact you at ' + document.getElementById('email').value + ' within 12 hours.';
+        
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'TRANSMIT PROJECT REQUEST';
+        document.getElementById('booking-form').reset();
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

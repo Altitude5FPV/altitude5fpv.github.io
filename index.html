@@ -683,22 +683,28 @@
             To connect live submissions for free:
             Sign up at https://formspree.io or https://web3forms.com and replace the action URL below!
           -->
-          <form id="booking-form" class="space-y-4 bg-dark-850 p-8 rounded-2xl border border-white/10" onsubmit="handleFormSubmit(event)">
+          <form id="booking-form" action="https://api.web3forms.com/submit" method="POST" class="space-y-4 bg-dark-850 p-8 rounded-2xl border border-white/10">
+            <!-- Web3Forms Access Key -->
+            <input type="hidden" name="access_key" value="3489e16e-2bae-4151-98ae-be0fe0207723">
+
+            <!-- Optional: Subject line for incoming emails -->
+            <input type="hidden" name="subject" value="New Inquiry from Altitude 5 FPV Website">
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label for="name" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Your Name / Production Co. *</label>
-                <input type="text" id="name" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="e.g. Apex Media House">
+                <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="e.g. Apex Media House">
               </div>
               <div>
                 <label for="email" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Email Address *</label>
-                <input type="email" id="email" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="producer@agency.com">
+                <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="producer@agency.com">
               </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label for="shootType" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Shoot Type *</label>
-                <select id="shootType" class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors">
+                <select id="shootType" name="shoot_type" class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors">
                   <option value="automotive">Automotive Chase / Drift</option>
                   <option value="actionsports">Action Sports / Outdoor</option>
                   <option value="indoor">Indoor Cinewhoop One-Take</option>
@@ -708,22 +714,19 @@
               </div>
               <div>
                 <label for="location" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Shoot Location & Date</label>
-                <input type="text" id="location" class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="e.g. Netherlands, Nov 2026">
+                <input type="text" id="location" name="location_date" class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors" placeholder="e.g. Netherlands, Nov 2026">
               </div>
             </div>
 
             <div>
               <label for="details" class="block text-xs font-mono text-zinc-400 uppercase mb-2">Project Brief & Deliverable Specs *</label>
-              <textarea id="details" rows="4" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors resize-none" placeholder="Provide details regarding flight environment, desired cameras, or creative moodboard..."></textarea>
+              <textarea id="details" name="project_details" rows="4" required class="w-full px-4 py-3 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:outline-none focus:border-accent-red transition-colors resize-none" placeholder="Provide details regarding flight environment, desired cameras, or creative moodboard..."></textarea>
             </div>
 
             <!-- Submit Button -->
             <button type="submit" id="submit-btn" class="w-full py-4 rounded-lg bg-accent-red hover:bg-accent-hover text-white font-display font-bold text-xs uppercase tracking-wider transition-all glow-red">
               Transmit Project Request
             </button>
-
-            <!-- Status Message Container -->
-            <div id="form-feedback" class="hidden p-4 rounded-lg text-xs font-mono text-center"></div>
           </form>
         </div>
 
